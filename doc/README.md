@@ -1,7 +1,7 @@
 # M6: Cloud Deployment
 
-> Collaboration: *Group* milestone
-> Completion: About 40+ hours (split among multiple team members)
+> Collaboration: *Group* milestone\
+> Completion: About 40+ hours (split among multiple team members)\
 > Deadline: Monday Apr. 22, 2024 (11:59PM ET)
 
 The final milestone is all about composing, finessing, and deploying your end-to-end search engine on distributed cloud infrastructure: Elastic Compute Cloud (EC2) nodes from Amazon Web Services (AWS). For this milestone, students will be working in group, combining best-of-breed implementations, considering additional trade-offs, and tuning several subsystems appropriately to offer a system that is deployed and runs on the cloud. Each group will evaluate and characterize their end-to-end system using relevant workloads, write a paper that reports on the group's findings, and present a poster that summarizes the findings.
