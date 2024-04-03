@@ -1,23 +1,32 @@
 # M6: Cloud Deployment
 
->Collaboration: *Group* milestone
->Completion: About 40+ hours (split among multiple team members)
->Deadline: Monday Apr. 22, 2024 (11:59PM ET)
-
+> Collaboration: *Group* milestone
+> Completion: About 40+ hours (split among multiple team members)
+> Deadline: Monday Apr. 22, 2024 (11:59PM ET)
 
 The final milestone is all about composing, finessing, and deploying your end-to-end search engine on distributed cloud infrastructure: Elastic Compute Cloud (EC2) nodes from Amazon Web Services (AWS). For this milestone, students will be working in group, combining best-of-breed implementations, considering additional trade-offs, and tuning several subsystems appropriately to offer a system that is deployed and runs on the cloud. Each group will evaluate and characterize their end-to-end system using relevant workloads, write a paper that reports on the group's findings, and present a poster that summarizes the findings.
 
 For this milestone, all of the code developed and submitted must come from the team members — i.e., students cannot use any existing solutions or obfuscated code. The integration of several components, the deployment on AWS, and the characterization of the system all require significant effort — thus all should be done early and tested/repeated frequently.
 
+<br>
+
 ## Table of Contents
+- [Background and Context](#background-and-context)
+- [Search Engine](#search-engine)
+- [Appropriate Target Subsets](#appropriate-target-subsets)
+- [Benchmarking \& Characterization](#benchmarking--characterization)
+- [Extra Credit Opportunities](#extra-credit-opportunities)
+- [Recommendations](#recommendations)
+- [Reflections \& The Way Forward](#reflections--the-way-forward)
+- [Project Submission](#project-submission)
+- [Feedback](#feedback)
+- [Appendix: Getting Started with AWS](#appendix-getting-started-with-aws)
 
+<br>
 
-
-
-## Background & Context
+## Background and Context
 
 The search engine will use all the components seen before, integrated appropriately, and scaled out to run on significantly larger datasets: a crawler, an indexer, pagerank, and other components — all executing on a distributed execution engine and running on a distributed key-value store. Additional components will need to be developed too: a web and/or command-line interface for searching and presenting results, and a management interface for checking the execution of additional components.
-
 
 You will deploy these components on Amazon Elastic Compute Cloud (Amazon EC2), an environment for provisioning elastic computational cloud resources. EC2 allows users to create, customize, launch, and terminate server instances as needed — paying by the second only for active servers. Up to some limits, smaller server instances are free for educational purposes.
 
@@ -49,7 +58,7 @@ One approach for this part of the project is to write several small MapReduce pr
 
 <br>
 
-**Query and retrieval subsystem:** This subsystem is responsible for receiving a query from a client and responding with a list of pages ordered by relevance: it provides a search form, for inserting text, and returns an ordered list of results. This component can be web-based and/or command-line-based, and should also be used to perform a series of end-to-end system tests (see the evaluation section of your report.) This component can additionally provide debug information about how a certain order was calculated. For example, each result can include some information about how the various factors—word frequencies, document frequencies, PageRank, n-grams, and other features—contribute to the result.  
+**Query and retrieval subsystem:** This subsystem is responsible for receiving a query from a client and responding with a list of pages ordered by relevance: it provides a search form, for inserting text, and returns an ordered list of results. This component can be web-based and/or command-line-based, and should also be used to perform a series of end-to-end system tests (see the evaluation section of your report.) This component can additionally provide debug information about how a certain order was calculated. For example, each result can include some information about how the various factors—word frequencies, document frequencies, PageRank, n-grams, and other features—contribute to the result.
 
 An additional control panel of the various components might be useful: how many URLs and GBs has the crawler downloaded? How large are the inverted indices? How are several distributed computations going? Can you stop and restart some of these components? This is not a required component, but its functionality may—or may not, depending on your approach—pay off at later stages, so you might want to leave it for later.
 
@@ -62,20 +71,16 @@ The engine so far has been described as a generic engine for any document on the
 Here are a few ideas — but again, feel free to be as creative as possible:
 
 - **Patents:** The goal of this project is to crawl, index, and query patents, using one or more of the patent databases around the world — including [USPTO](https://www.google.com/url?q=https://www.google.com/googlebooks/uspto.html&sa=D&source=editors&ust=1712121655485331&usg=AOvVaw1DcMRuR2q6NY5vcKeTxP-U). An important aspect here is that patents are often described in PDF documents, thus this project includes using a third-party library to convert PDFs to text — as extra credit, maintaining information about headings, emphasis, and other data for indexing and querying.
-
 - **Npm packages:** The goal of this project is to crawl, index, and query JavaScript packages, making all these modules searchable via your search engine. Use the [Brown-hosted npm snapshot](https://www.google.com/url?q=https://atlas.cs.brown.edu/data/npm&sa=D&source=editors&ust=1712121655485523&usg=AOvVaw1K5vgzRSUZV7-4RF23LFHC) to download these packages. As extra credit, consider additional analysis and indexing search by permissions for these modules — so that a user can search for modules named padding with permissions {readFileSync: x}.
-
 - **GitHub Markdown files:** The goal of this project is to crawl, index, and query README markdown files from a large subset of Github projects. The engine should return all relevant files and projects using these files. As extra credit, consider allowing querying by programming language and/or author.
-
 - **Research papers:** The focus here is to crawl, index, and query research papers, using one or more databases around the world. One idea would be to have the crawler start from the [DBLP database](https://www.google.com/url?q=https://atlas.cs.brown.edu/data/dblp/&sa=D&source=editors&ust=1712121655485879&usg=AOvVaw1LKP26-tI9dPLLeHLPHMrb), and then either go through author websites or some of the larger mostly-open publishers (e.g., [Usenix](https://www.google.com/url?q=https://www.usenix.org/publications/proceedings&sa=D&source=editors&ust=1712121655485962&usg=AOvVaw2vmloDdsBtpvuMBhOy1gk1) or [ACM](https://www.google.com/url?q=https://dl.acm.org/&sa=D&source=editors&ust=1712121655486047&usg=AOvVaw0mEaa_BRKUqagaq30Bwgvc)). Other options are possible.
-
 - **Open Books:** The goal of this project is to crawl, index, and query open books; these books can be found in textual form via [Project Gutenberg](https://www.google.com/url?q=https://www.gutenberg.org/&sa=D&source=editors&ust=1712121655486224&usg=AOvVaw0noxIaKiRksXccGhUU4TLg) ([Brown CS mirror](https://www.google.com/url?q=https://atlas.cs.brown.edu/data/gutenberg/&sa=D&source=editors&ust=1712121655486296&usg=AOvVaw2yrBxWHH9GREuDjJmBeCrn)). Extra credit here could include searching in multiple languages, offering suggestions for relevant books, and offering the same book in other available languages.
 
 <br>
 
 ## Benchmarking & Characterization
 
-The [handout describing each team's paper report](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRZNbg9T3aHVi5B_IcRnpPYhOKpIOylOYF3FbIh06ABxLLZzmnbhuad-ZWnc1BtPciRJKdxoDdlUxLs/pub&sa=D&source=editors&ust=1712121655486555&usg=AOvVaw3pLbHeIVij-y0uB_aeWHs6) contains [an extensive section on benchmarking and characterization](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRZNbg9T3aHVi5B_IcRnpPYhOKpIOylOYF3FbIh06ABxLLZzmnbhuad-ZWnc1BtPciRJKdxoDdlUxLs/pub%23h.my7rmzey516h&sa=D&source=editors&ust=1712121655486673&usg=AOvVaw2cMB0ACtjc1kWVGp0k5kxv)[ ](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRZNbg9T3aHVi5B_IcRnpPYhOKpIOylOYF3FbIh06ABxLLZzmnbhuad-ZWnc1BtPciRJKdxoDdlUxLs/pub%23h.my7rmzey516h&sa=D&source=editors&ust=1712121655486783&usg=AOvVaw0vNmfrcUyJ7lg6XBUI0iGM)of your system as well as ideas for figures and plots visualizing the results. Note that you must pick appropriate benchmarks for your project and justify them — for example, for a search engine that targets patents it is important to characterize the size and complexity of the input as well as any additional processing for storing and querying these patents.
+The [handout describing each team&#39;s paper report](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRZNbg9T3aHVi5B_IcRnpPYhOKpIOylOYF3FbIh06ABxLLZzmnbhuad-ZWnc1BtPciRJKdxoDdlUxLs/pub&sa=D&source=editors&ust=1712121655486555&usg=AOvVaw3pLbHeIVij-y0uB_aeWHs6) contains [an extensive section on benchmarking and characterization](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRZNbg9T3aHVi5B_IcRnpPYhOKpIOylOYF3FbIh06ABxLLZzmnbhuad-ZWnc1BtPciRJKdxoDdlUxLs/pub%23h.my7rmzey516h&sa=D&source=editors&ust=1712121655486673&usg=AOvVaw2cMB0ACtjc1kWVGp0k5kxv)of your system as well as ideas for figures and plots visualizing the results. Note that you must pick appropriate benchmarks for your project and justify them — for example, for a search engine that targets patents it is important to characterize the size and complexity of the input as well as any additional processing for storing and querying these patents.
 
 <br>
 
@@ -136,16 +141,12 @@ This section briefly summarizes how to get started with Amazon Web Services. It 
 
 Costs: You will be billed for AWS instances that go beyond those limits — so you will want to terminate them when they aren’t in direct use. Make sure you read the entire section before launching any instances — including Terminating your AWS Instances.
 
-**Creating an account:** Go to [AWS](https://www.google.com/url?q=http://aws.amazon.com/&sa=D&source=editors&ust=1712121655489508&usg=AOvVaw2gs9o0_KcE3AbrCxa6_5Ya) and click *Create an AWS Account*. You can use your Brown email — you'll be asked to enter some information, including payment info. At the very end, make sure you pick the *Free* tier.
+- **Creating an account:** Go to [AWS](https://www.google.com/url?q=http://aws.amazon.com/&sa=D&source=editors&ust=1712121655489508&usg=AOvVaw2gs9o0_KcE3AbrCxa6_5Ya) and click *Create an AWS Account*. You can use your Brown email — you'll be asked to enter some information, including payment info. At the very end, make sure you pick the *Free* tier.
+- **Launching an instance:** To launch a new EC2 instance, go to [AWS console](https://www.google.com/url?q=http://console.aws.amazon.com&sa=D&source=editors&ust=1712121655489824&usg=AOvVaw3szjH6kf7bkK-Q3Sqhxbs4), search for EC2 (or click at the top left, services, then Compute, then EC2), and *[Launch Instance](https://www.google.com/url?q=https://us-east-2.console.aws.amazon.com/ec2/home?region%3Dus-east-2%23LaunchInstances&sa=D&source=editors&ust=1712121655489928&usg=AOvVaw2gtQH_8vxCQhmGxA_utfjn)*. Pick one of the image types — e.g. Micro (t2.micro) or Small (m3.small) — and the image of the operating system — e.g., Ubuntu — and confirm that it is free-tier eligible. Create your own .pem key pair (e.g., name cs1380) to be able to connect to these instances and save it on your computer. Then create a new security group, and enable SSH, HTTP, and HTTPS. Eventually, *Launch your instance*.
+- **Setting up API tools & Logging in:** After launching an instance, you can connect via (1) a [web-based ssh client](https://www.google.com/url?q=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html%23ec2-instance-connect-connecting-console&sa=D&source=editors&ust=1712121655490410&usg=AOvVaw2HY69hDwNIMtiG15YhfkxQ), (2) [your own ssh key and client](https://www.google.com/url?q=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html%23ec2-instance-connect-connecting-aws-cli&sa=D&source=editors&ust=1712121655490521&usg=AOvVaw05zMhDzwcZ1U-lBDP6PKa1) (this requires pushing your key to the remote instance), or (3) [EC2 instance connect](https://www.google.com/url?q=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html%23connect-linux-inst-eic-cli-ssh&sa=D&source=editors&ust=1712121655490616&usg=AOvVaw3BaPIiUkvJuqw54GyyqWgW). Options #2 and #3 require [setting up the AWS AMI tools](https://www.google.com/url?q=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-up-ami-tools.html&sa=D&source=editors&ust=1712121655490690&usg=AOvVaw2GLP5omLEY088xAI-mpffJ) on your machine (these are already set up on the course's docker image). You can also create your own docker image that sets up your node and starts it up.
 
-**Launching an instance:** To launch a new EC2 instance, go to [AWS console](https://www.google.com/url?q=http://console.aws.amazon.com&sa=D&source=editors&ust=1712121655489824&usg=AOvVaw3szjH6kf7bkK-Q3Sqhxbs4), search for EC2 (or click at the top left, services, then Compute, then EC2), and *[Launch Instance](https://www.google.com/url?q=https://us-east-2.console.aws.amazon.com/ec2/home?region%3Dus-east-2%23LaunchInstances&sa=D&source=editors&ust=1712121655489928&usg=AOvVaw2gtQH_8vxCQhmGxA_utfjn)*. Pick one of the image types — e.g. Micro (t2.micro) or Small (m3.small) — and the image of the operating system — e.g., Ubuntu — and confirm that it is free-tier eligible. Create your own .pem key pair (e.g., name cs1380) to be able to connect to these instances and save it on your computer. Then create a new security group, and enable SSH, HTTP, and HTTPS. Eventually, *Launch your instance*.
+  Option #1 is far from ideal for long-running system administration tasks, but might be for a quick confirmation that everything's working as expected; Select the EC2 instance that you created and choose "Connect.“ Select “EC2 Instance Connect.” (note the IP address, e.g., 3.15.40.40) Choose “Connect.” A window opens, and you are connected to your instance.
+- **Post-login:** When logged in, and assuming an Ubuntu image, first run sudo apt update then run sudo apt install nodejs git vim and then run git clone `<github-repo>` to fetch your latest changes from GitHub. You can then deploy your system on this instance and connect it to nodes running on other instances. For long-running jobs, you might want to use gnu screen or tmux so that they stay up and running even after you log out from an instance.
+- **Terminating Instances:** Note that you will be billed for AWS instances as they are alive past the maximum total of 750 hours per month (per member in the team), so you will want to terminate them when they are not in direct use.
 
-**Setting up API tools & Logging in:** After launching an instance, you can connect via (1) a [web-based ssh client](https://www.google.com/url?q=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html%23ec2-instance-connect-connecting-console&sa=D&source=editors&ust=1712121655490410&usg=AOvVaw2HY69hDwNIMtiG15YhfkxQ), (2) [your own ssh key and client](https://www.google.com/url?q=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html%23ec2-instance-connect-connecting-aws-cli&sa=D&source=editors&ust=1712121655490521&usg=AOvVaw05zMhDzwcZ1U-lBDP6PKa1) (this requires pushing your key to the remote instance), or (3) [EC2 instance connect](https://www.google.com/url?q=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html%23connect-linux-inst-eic-cli-ssh&sa=D&source=editors&ust=1712121655490616&usg=AOvVaw3BaPIiUkvJuqw54GyyqWgW). Options #2 and #3 require [setting up the AWS AMI tools](https://www.google.com/url?q=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/set-up-ami-tools.html&sa=D&source=editors&ust=1712121655490690&usg=AOvVaw2GLP5omLEY088xAI-mpffJ) on your machine (these are already set up on the course's docker image). You can also create your own docker image that sets up your node and starts it up.
-
-Option #1 is far from ideal for long-running system administration tasks, but might be for a quick confirmation that everything's working as expected; Select the EC2 instance that you created and choose "Connect.“ Select “EC2 Instance Connect.” (note the IP address, e.g., 3.15.40.40) Choose “Connect.” A window opens, and you are connected to your instance.
-
-**Post-login:** When logged in, and assuming an Ubuntu image, first run sudo apt update then run sudo apt install nodejs git vim and then run git clone <github-repo> to fetch your latest changes from GitHub. You can then deploy your system on this instance and connect it to nodes running on other instances. For long-running jobs, you might want to use gnu screen or tmux so that they stay up and running even after you log out from an instance.
-
-**Terminating Instances:** Note that you will be billed for AWS instances as they are alive past the maximum total of 750 hours per month (per member in the team), so you will want to terminate them when they are not in direct use.
-
-To terminate an image, log into your [AWS Management Console](https://www.google.com/url?q=http://console.aws.amazon.com/&sa=D&source=editors&ust=1712121655491332&usg=AOvVaw1FmI0NiII7kSBaOL5L6UNy), locate the instance in your list of instances on the Instances (likely in "recently visited" too), right-click on the instance, and then click "Terminate", and when prompted for confirmation click "Yes, Terminate". Amazon EC2 begins terminating the instance. As soon as the instance status changes to shutting down or terminated, you stop incurring charges for that instance. Similarly, you should delete EBS volumes (or any other resources) that you aren't using anymore.
+  To terminate an image, log into your [AWS Management Console](https://www.google.com/url?q=http://console.aws.amazon.com/&sa=D&source=editors&ust=1712121655491332&usg=AOvVaw1FmI0NiII7kSBaOL5L6UNy), locate the instance in your list of instances on the Instances (likely in "recently visited" too), right-click on the instance, and then click "Terminate", and when prompted for confirmation click "Yes, Terminate". Amazon EC2 begins terminating the instance. As soon as the instance status changes to shutting down or terminated, you stop incurring charges for that instance. Similarly, you should delete EBS volumes (or any other resources) that you aren't using anymore.
