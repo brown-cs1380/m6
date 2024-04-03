@@ -28,7 +28,7 @@ The search engine will use all the components seen before, integrated appropriat
 
 You will deploy these components on Amazon Elastic Compute Cloud (Amazon EC2), an environment for provisioning elastic computational cloud resources. EC2 allows users to create, customize, launch, and terminate server instances as needed — paying by the second only for active servers. Up to some limits, smaller server instances are free for educational purposes.
 
-We have created a [step-by-step guide](https://docs.google.com/document/d/e/2PACX-1vTn_qOTumYeO2ib4d1R-M8c7gzXnHvLK3dHREpmLK14FFuCADAarCo0Jqbsl7QUdGimln1wDCmQQ6ca/pub#h.shl74022iacj) for configuring and launching images similar to the ones used for the development of your project. Please note that you will be billed for AWS instances and storage volumes as they are alive, so you will want to **terminate them when not in direct use**. As shown in class, the AWS Dashboard has an overview of the resources you're currently using.
+We have created a [step-by-step guide](#appendix-getting-started-with-aws) for configuring and launching images similar to the ones used for the development of your project. Please note that you will be billed for AWS instances and storage volumes as they are alive, so you will want to **terminate them when not in direct use**. As shown in class, the AWS Dashboard has an overview of the resources you're currently using.
 
 
 ## Search Engine
