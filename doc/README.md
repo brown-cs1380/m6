@@ -8,7 +8,6 @@ The final milestone is all about composing, finessing, and deploying your end-to
 
 For this milestone, all of the code developed and submitted must come from the team members — i.e., students cannot use any existing solutions or obfuscated code. The integration of several components, the deployment on AWS, and the characterization of the system all require significant effort — thus all should be done early and tested/repeated frequently.
 
-<br>
 
 ## Table of Contents
 - [Background and Context](#background-and-context)
@@ -22,7 +21,6 @@ For this milestone, all of the code developed and submitted must come from the t
 - [Feedback](#feedback)
 - [Appendix: Getting Started with AWS](#appendix-getting-started-with-aws)
 
-<br>
 
 ## Background and Context
 
@@ -32,7 +30,6 @@ You will deploy these components on Amazon Elastic Compute Cloud (Amazon EC2), a
 
 We have created a [step-by-step guide](https://docs.google.com/document/d/e/2PACX-1vTn_qOTumYeO2ib4d1R-M8c7gzXnHvLK3dHREpmLK14FFuCADAarCo0Jqbsl7QUdGimln1wDCmQQ6ca/pub#h.shl74022iacj) for configuring and launching images similar to the ones used for the development of your project. Please note that you will be billed for AWS instances and storage volumes as they are alive, so you will want to **terminate them when not in direct use**. As shown in class, the AWS Dashboard has an overview of the resources you're currently using.
 
-<br>
 
 ## Search Engine
 
@@ -42,7 +39,6 @@ As described earlier in the semester, a search engine for the web is fundamental
 - an indexing subsystem, i.e., a subsystem that processes content to extract key features, rank their importance, and restructure content to accelerate answering queries.
 - a query subsystem, i.e., a subsystem that is responsible for receiving a query from a client and responding with the most appropriate content.
 
-<br>
 
 **Crawling subsystem:** The crawling subsystem should build upon M5, but augmented with additional features for parsing HTML and other documents and extracting key information. Its execution should be fully distributed — spreading crawling load across several peers using your distributed execution engine from M5. One approach would be to have each node extract URLs (during a map phase) and then shuffle URLs to nodes responsible for crawling — using the key-value structure appropriately to distribute load uniformly and deterministically across nodes. Each node could keep a local index of URLs it has seen to avoid downloading URLs it has already seen.
 
@@ -50,19 +46,16 @@ As described earlier in the semester, a search engine for the web is fundamental
 
 Crawling should proceed first, cover a non-trivial set of pages (>100K, with appropriately diverse seed URLs), and maintain as much of the state as possible long-term, as its result is necessary for the execution of the entire search engine. It is important to (1) leverage persistence and—to ensure scalability—sharding, to allow crawling to stop and continue from where it stopped, and (2) to inspect its state frequently to detect and avoid pathological corner-cases — e.g., cycles, scraping traps, light-content corners of the web, etc.
 
-<br>
 
 **Indexing subsystem**: The indexing subsystem is responsible for creating appropriate data structures for answering queries efficiently. It takes as input information from the crawling subsystem and creates inverted indices, information-retrieval metrics, and other ranking features as necessary. Examples of such features include TF/IDF metrics, page-rank weights, page metadata, and other proximity metrics. Its execution should be fully distributed, spreading indexing load across several peers using your distributed execution engine (M5) — possibly augmented and tailored to these workloads — and storing the resulting data structures in a sharded and load-balanced fashion on your distributed storage subsystem (M4). If possible, the storage subsystem should be optimized for read-heavy workloads to accelerate lookups by the search engine — so the index data should be structured appropriately to facilitate efficient searches.
 
 One approach for this part of the project is to write several small MapReduce programs that will execute independently on your distributed execution and storage subsystems. Such small programs are easier to specify and debug, challenges that become pronounced in a distributed setting. Running link analysis on production is somewhat challenging, partly due to the dynamic information of the web graph — at every point in time you have crawled only a subgraph, so you are soon to discover more edges. And executing MapReduce iteratively requires also thinking about how to have a completed job fire up the next iteration. The indexing engine can leverage additional information in pages — e.g., header information, semantic amplifiers — and support multi-gram phrase search.
 
-<br>
 
 **Query and retrieval subsystem:** This subsystem is responsible for receiving a query from a client and responding with a list of pages ordered by relevance: it provides a search form, for inserting text, and returns an ordered list of results. This component can be web-based and/or command-line-based, and should also be used to perform a series of end-to-end system tests (see the evaluation section of your report.) This component can additionally provide debug information about how a certain order was calculated. For example, each result can include some information about how the various factors—word frequencies, document frequencies, PageRank, n-grams, and other features—contribute to the result.
 
 An additional control panel of the various components might be useful: how many URLs and GBs has the crawler downloaded? How large are the inverted indices? How are several distributed computations going? Can you stop and restart some of these components? This is not a required component, but its functionality may—or may not, depending on your approach—pay off at later stages, so you might want to leave it for later.
 
-<br>
 
 ## Appropriate Target Subsets
 
@@ -76,13 +69,11 @@ Here are a few ideas — but again, feel free to be as creative as possible:
 - **Research papers:** The focus here is to crawl, index, and query research papers, using one or more databases around the world. One idea would be to have the crawler start from the [DBLP database](https://www.google.com/url?q=https://atlas.cs.brown.edu/data/dblp/&sa=D&source=editors&ust=1712121655485879&usg=AOvVaw1LKP26-tI9dPLLeHLPHMrb), and then either go through author websites or some of the larger mostly-open publishers (e.g., [Usenix](https://www.google.com/url?q=https://www.usenix.org/publications/proceedings&sa=D&source=editors&ust=1712121655485962&usg=AOvVaw2vmloDdsBtpvuMBhOy1gk1) or [ACM](https://www.google.com/url?q=https://dl.acm.org/&sa=D&source=editors&ust=1712121655486047&usg=AOvVaw0mEaa_BRKUqagaq30Bwgvc)). Other options are possible.
 - **Open Books:** The goal of this project is to crawl, index, and query open books; these books can be found in textual form via [Project Gutenberg](https://www.google.com/url?q=https://www.gutenberg.org/&sa=D&source=editors&ust=1712121655486224&usg=AOvVaw0noxIaKiRksXccGhUU4TLg) ([Brown CS mirror](https://www.google.com/url?q=https://atlas.cs.brown.edu/data/gutenberg/&sa=D&source=editors&ust=1712121655486296&usg=AOvVaw2yrBxWHH9GREuDjJmBeCrn)). Extra credit here could include searching in multiple languages, offering suggestions for relevant books, and offering the same book in other available languages.
 
-<br>
 
 ## Benchmarking & Characterization
 
 The [handout describing each team&#39;s paper report](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRZNbg9T3aHVi5B_IcRnpPYhOKpIOylOYF3FbIh06ABxLLZzmnbhuad-ZWnc1BtPciRJKdxoDdlUxLs/pub&sa=D&source=editors&ust=1712121655486555&usg=AOvVaw3pLbHeIVij-y0uB_aeWHs6) contains [an extensive section on benchmarking and characterization](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRZNbg9T3aHVi5B_IcRnpPYhOKpIOylOYF3FbIh06ABxLLZzmnbhuad-ZWnc1BtPciRJKdxoDdlUxLs/pub%23h.my7rmzey516h&sa=D&source=editors&ust=1712121655486673&usg=AOvVaw2cMB0ACtjc1kWVGp0k5kxv)of your system as well as ideas for figures and plots visualizing the results. Note that you must pick appropriate benchmarks for your project and justify them — for example, for a search engine that targets patents it is important to characterize the size and complexity of the input as well as any additional processing for storing and querying these patents.
 
-<br>
 
 ## Extra Credit Opportunities
 
@@ -92,13 +83,12 @@ The project is completely open-ended, and as such students are encouraged to go 
 - **Additional metadata:** Include document and word metadata that might be useful in creating improved rankings (e.g., the context of the words -- show a small excerpt of the original document on your results page in which the hits are highlighted, e.g., in bold).
 - **Location awareness:** Provide location-specific results. In many cases you may be able to infer that a page has a connection to a particular location (e.g., based on addresses); similarly, you can often infer the location of the user that submits the query, e.g., via geolocation or by doing a reverse DNS lookup.
 - **Fault tolerance:** Your search engine should continue to work if some of the nodes crash or are terminated. This requires at least some degree of replication (so that parts of the index do not become unavailable when crashes occur) and a way to monitor the 'health' of the nodes in the index, possibly through a gossip protocol.
-- **PageRank:** Perform link analysis using the PageRank algorithm implemented as an iterative MapReduce job. This requires solving several challenges, including (1) "dangling links" (to pages you have not yet crawled, (2) data encoding to serve iterations, so that the output of one iteration can serve as input to the next, and (3) confirming that the PageRank values have indeed converged.
+- **PageRank:** Perform link analysis using the PageRank algorithm implemented as an iterative MapReduce job. This requires solving several challenges, including (1) "dangling links" (to pages you have not yet crawled), (2) data encoding to serve iterations, so that the output of one iteration can serve as input to the next, and (3) confirming that the PageRank values have indeed converged.
 - **Spell check and suggestions:** Implement a simple Google-style spell-check — for words with few hits, try simple edits to the word (e.g., adding, removing, transposing characters) and see if a much more popular word is “nearby.”
 - **Debugging infrastructure:** Create a service that periodically checks and returns the status of the distributed environment. Its input is a set of nodes (ips and ports). The service periodically queries these nodes to display their current state. The nodes can also be expanded with a debug service that can be queried for all relevant information. The current state of the system can be sent to stdout as a JSON for further processing.
 
 The value of these extra-credit tasks will depend on their implementation and evaluation — which should be described thoroughly in the team's paper report.
 
-<br>
 
 ## Recommendations
 
@@ -115,25 +105,21 @@ A few suggestions for team members:
 - keep a close eye on the AWS dashboard and appropriately pause/resume EC2 instances based on their intended use and phase of the project.
 - focus on the core functionality first — only then worry about optimizations and beautification; a beautiful search engine that shows no results has little value.
 
-<br>
 
 ## Reflections & The Way Forward
 
 Remember to keep notes of the technical challenges, the solutions used by your system, and your own reflections — all these will be important while you are [working on your report](https://www.google.com/url?q=https://docs.google.com/document/d/e/2PACX-1vRZNbg9T3aHVi5B_IcRnpPYhOKpIOylOYF3FbIh06ABxLLZzmnbhuad-ZWnc1BtPciRJKdxoDdlUxLs/pub&sa=D&source=editors&ust=1712121655488433&usg=AOvVaw0el7ybdYZjQ_P-Q_TLHRva).
 
-<br>
 
 ## Project Submission
 
 Please include a URL to your repository *in your final paper report*. The repository must include a *fully reproducible version of the results reported in the paper* — including the entire codebase, benchmarks, and results on the set of machines used to produce these results.
 
-<br>
 
 ## Feedback
 
 Please let us know if you find any mistakes, inconsistencies, or confusing language in this or any other CS1380 document by (1) emailing [cs1380headtas@lists.brown.edu](mailto:cs1380headtas@lists.brown.edu), or (2) filling out the [anonymous feedback form](https://www.google.com/url?q=https://forms.gle/955TbytnQBoZakzv8&sa=D&source=editors&ust=1712121655488918&usg=AOvVaw20UoKbRikybt4orIZMrGth). In both cases, concrete ideas on *how* to improve things—and, if possible, for extra-credit purposes, eponymously—would be appreciated.
 
-<br>
 
 ## Appendix: Getting Started with AWS
 
