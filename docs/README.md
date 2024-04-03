@@ -42,7 +42,7 @@ As described earlier in the semester, a search engine for the web is fundamental
 
 **Crawling subsystem:** The crawling subsystem should build upon M5, but augmented with additional features for parsing HTML and other documents and extracting key information. Its execution should be fully distributed — spreading crawling load across several peers using your distributed execution engine from M5. One approach would be to have each node extract URLs (during a map phase) and then shuffle URLs to nodes responsible for crawling — using the key-value structure appropriately to distribute load uniformly and deterministically across nodes. Each node could keep a local index of URLs it has seen to avoid downloading URLs it has already seen.
 
-![img](crawling-subsystem.jpg)
+![](crawling-subsystem.jpg)
 
 Crawling should proceed first, cover a non-trivial set of pages (>100K, with appropriately diverse seed URLs), and maintain as much of the state as possible long-term, as its result is necessary for the execution of the entire search engine. It is important to (1) leverage persistence and—to ensure scalability—sharding, to allow crawling to stop and continue from where it stopped, and (2) to inspect its state frequently to detect and avoid pathological corner-cases — e.g., cycles, scraping traps, light-content corners of the web, etc.
 
